@@ -1,3 +1,4 @@
+import 'package:docu_sync/constants/theme.dart';
 import 'package:docu_sync/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: appTheme,
       home: LoginScreen(),
     );
   }
