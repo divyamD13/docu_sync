@@ -31,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: Center(
         child: SizedBox(
           height: MediaQuery
@@ -40,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
             .height * 0.5,
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 0.0),
               child: SizedBox(
                 width: kIsWeb ? webWidth : mobileWidth,
                 child: Form(
