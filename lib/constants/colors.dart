@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 
+// A class to hold all the color constants for the app.
+// This follows the "Modern & Minimalist" palette.
 class AppColors {
-  static const Color primaryBlue = Color(0xFF1A73E8); // Google Docs blue
-  static const Color lightBlue = Color(0xFFE8F0FE);   // Light background for inputs
-  static const Color white = Colors.white;
-  static const Color black = Colors.black;
-  static const Color greyText = Color(0xFF5F6368);
-  static const Color borderGrey = Color(0xFFDDDDDD);
-  static const Color errorRed = Color(0xFFEA4335);     // Google red
-  static const Color googleButtonColor = Color(0xFFFFFFFF); // Google button background
-  static const Color background = Color(0xFFF8F9FA);    // Docs background
+  // Private constructor to prevent instantiation.
+  AppColors._();
 
-  // Optional: Google brand colors
-  static const Color googleBlue = Color(0xFF4285F4);
-  static const Color googleRed = Color(0xFFDB4437);
-  static const Color googleYellow = Color(0xFFF4B400);
-  static const Color googleGreen = Color(0xFF0F9D58);
+  // --- Primary Palette ---
+  static const Color primary = Color(0xFF00796B); // Deep Teal
+  static const Color background = Color(0xFFFCFCFC); // Clean Off-White
+  static const Color text = Color(0xFF333333); // Near Black
+  static const Color subtleUi = Color(0xFFE0E0E0); // Soft Gray for borders/dividers
+
+  // --- Dark Theme Palette ---
+  static const Color darkBackground = Color(0xFF1A1A1A); // Deep, dark gray
+  static const Color darkSurface = Color(0xFF2C2C2C); // Slightly lighter gray for cards/surfaces
+  static const Color darkText = Color(0xFFF5F5F5); // Clean Off-White for text
+
+  // --- Semantic Colors ---
+  static const Color error = Color(0xFFD32F2F); // Standard error red
+  static const Color success = Color(0xFF388E3C); // Standard success green
+
+  // --- Neutral Colors ---
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color black = Color(0xFF000000);
 }
