@@ -137,6 +137,7 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.primary,
+        backgroundColor: AppColors.white,
         side: BorderSide(color: Colors.grey.shade800),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
