@@ -1,19 +1,19 @@
 import 'dart:convert';
+import 'package:docu_sync/constants/colors.dart';
+import 'package:docu_sync/screens/login_screen.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:incidentapp/constants/colors.dart';
-import 'package:incidentapp/screens/account_set_up_screen.dart';
-import 'package:incidentapp/screens/sign_in_screen.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -28,14 +28,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isFormValid = false;
 
   @override
-  void initState() {
-    super.initState();
-    _emailController.addListener(_validateForm);
-    _phoneController.addListener(_validateForm);
-    _employeeIdController.addListener(_validateForm);
-    _passwordController.addListener(_validateForm);
-    _confirmPasswordController.addListener(_validateForm);
-  }
+  // void initState() {
+  //   super.initState();
+  //   _emailController.addListener(_validateForm);
+  //   _phoneController.addListener(_validateForm);
+  //   _employeeIdController.addListener(_validateForm);
+  //   _passwordController.addListener(_validateForm);
+  //   _confirmPasswordController.addListener(_validateForm);
+  // }
 
   void _validateForm() {
     final isValid = _formKey.currentState?.validate() ?? false;
@@ -55,7 +55,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
           height: MediaQuery.of(context).size.height,
           width: double.infinity,
           decoration: const BoxDecoration(
-            gradient: AppGradients.screenGradient,
+            gradient: LinearGradient(
+          colors: [
+            Color.fromRGBO(0, 121, 107, 1),
+            Color.fromRGBO(142, 196, 196, 1),
+            Color.fromRGBO(255, 255, 255, 1)
+          ], 
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
           ),
           child: SafeArea(
             child: SingleChildScrollView(
@@ -236,7 +244,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 value: _isChecked,
                                 onChanged: (value) {
                                   if (value == true) {
-                                    _showTermsBottomSheet();
                                   } else {
                                     setState(() {
                                       _isChecked = false;
@@ -247,7 +254,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               Flexible(
                                 child: GestureDetector(
-                                  onTap: _showTermsBottomSheet,
+                                  onTap: (){},
                                   child: Text.rich(
                                     TextSpan(
                                       text: "I agree with ",
@@ -296,12 +303,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             _isFormValid
                                 ? () {
                                   if (_formKey.currentState!.validate()) {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => AccountSetUpScreen(),
-                                      ),
-                                    );
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder:
+                                    //         (context) => ,
+                                    //   ),
+                                    //);
                                   }
                                 }
                                 : null,
@@ -316,7 +323,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onTap: () {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => SignInScreen(),
+                            builder: (context) => LoginScreen(),
                           ),
                         );
                       },
@@ -327,68 +334,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: [
                             TextSpan(
                               text: "Sign in here",
-                              style: Theme.of(context).textTheme.titleSmall,
+                              style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.primary),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          const TextSpan(
-                            text: "By logging in, you agree to JLL's ",
-                          ),
-                          TextSpan(
-                            text: 'Terms and Conditions',
-                            style: Theme.of(context).textTheme.titleSmall,
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () {
-                                    print('Terms and Conditions tapped');
-                                  },
-                          ),
-                          const TextSpan(text: ' and '),
-                          TextSpan(
-                            text: '\nPrivacy Policy',
-                            style: Theme.of(context).textTheme.titleSmall,
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () {
-                                    print('Privacy Policy tapped');
-                                  },
-                          ),
-                          const TextSpan(text: '.'),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          const TextSpan(text: "Powered by "),
-                          TextSpan(
-                            text: 'ExamPad',
-                            style: Theme.of(context).textTheme.titleSmall,
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () {
-                                    print('ExamPad tapped');
-                                  },
-                          ),
-                        ],
-                      ),
-                    ),
+                   
                   ],
                 ),
               ),

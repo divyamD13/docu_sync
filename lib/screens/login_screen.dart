@@ -1,4 +1,6 @@
 import 'package:docu_sync/constants/colors.dart';
+import 'package:docu_sync/screens/signup_screen';
+import 'package:docu_sync/screens/signup_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -181,11 +183,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               Center(
                                 child: TextButton(
                                   onPressed: () {
-                                    // Navigator.of(context).push(
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => ForgotPasswordScreen(),
-                                    //   ),
-                                    // );
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => SignupScreen(),
+                                        ),
+                                        );
                                   },
                                   child: RichText(
                                                         text: TextSpan(
@@ -198,10 +200,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 recognizer:
                                     TapGestureRecognizer()
                                       ..onTap = () {
-                                        //   Navigator.of(context).push(
-                                        // MaterialPageRoute(
-                                        //   builder: (context) => SignUpScreen(),
-                                        // ),);
+                                          Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => SignUpScreen(),
+                                        ),);
                                         print('Register here tapped');
                                       },
                                                             ),
