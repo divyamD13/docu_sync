@@ -30,7 +30,10 @@ class AppTheme {
       displayLarge: TextStyle(color: AppColors.text, fontWeight: FontWeight.bold),
       displayMedium: TextStyle(color: AppColors.text, fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(color: AppColors.text),
-      bodyMedium: TextStyle(color: AppColors.text, height: 1.5), // Main text style for editor
+      bodyMedium: TextStyle(color: AppColors.text, height: 1.5),
+      titleLarge: TextStyle(color: AppColors.text, height: 2), 
+      titleMedium: TextStyle(color: AppColors.text, height: 1.5),
+      titleSmall: TextStyle(color: AppColors.text, height: 1.0),// Main text style for editor
     ),
 
     // Define AppBar theme
@@ -115,7 +118,10 @@ class AppTheme {
       displayLarge: TextStyle(color: AppColors.darkText, fontWeight: FontWeight.bold),
       displayMedium: TextStyle(color: AppColors.darkText, fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(color: AppColors.darkText),
-      bodyMedium: TextStyle(color: AppColors.darkText, height: 1.5), // Main text style for editor
+      bodyMedium: TextStyle(color: AppColors.darkText, height: 1.5),
+      titleLarge: TextStyle(color: AppColors.text, height: 2), 
+      titleMedium: TextStyle(color: AppColors.text, height: 1.5),
+      titleSmall: TextStyle(color: AppColors.text, height: 1.0), // Main text style for editor
     ),
 
     // Define AppBar theme

@@ -7,7 +7,7 @@ class AppColors {
   AppColors._();
 
   // --- Primary Palette ---
-  static const Color primary = Color(0xFF00796B); // Deep Teal
+  static const Color primary = Color.fromRGBO(0, 121, 107, 1); // Deep Teal
   static const Color background = Color(0xFFFCFCFC); // Clean Off-White
   static const Color text = Color(0xFF333333); // Near Black
   static const Color subtleUi = Color(0xFFE0E0E0); // Soft Gray for borders/dividers

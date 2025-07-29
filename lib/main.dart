@@ -1,5 +1,6 @@
 import 'package:docu_sync/constants/theme.dart';
 import 'package:docu_sync/screens/login_screen.dart';
+import 'package:docu_sync/screens/spalsh_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,8 +16,8 @@ class MyApp extends StatelessWidget {
       title: 'DocuSync',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, 
-      home: LoginScreen(),
+      themeMode: ThemeMode.light, 
+      home: SplashScreen(),
     );
   }
 }
