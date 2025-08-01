@@ -1,19 +1,20 @@
 import 'package:docu_sync/constants/colors.dart';
-import 'package:docu_sync/screens/signup_screen';
+import 'package:docu_sync/repository/auth_repository.dart';
 import 'package:docu_sync/screens/signup_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenConsumerState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenConsumerState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -31,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _signInWithGoogle() {
+    ref.watch(authRepositoryProvider).signInWithGoogle();
     print('Google Sign-In triggered');
   }
 
@@ -49,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -202,15 +205,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ..onTap = () {
                                           Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (context) => SignUpScreen(),
-                                        ),);
-                                        print('Register here tapped');
-                                      },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
+                                          builder: (context) => SignupScreen(),
+                                        ),
+                                      );
+                                      print('Register here tapped');
+                                    },
+                                  ),
+                                ],                    ),
                                 ),
+                              ),
                               ),
                             ],
                           ),
