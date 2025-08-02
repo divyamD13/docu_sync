@@ -19,6 +19,7 @@ class AuthRepository {
       if (user != null) {
         print(user.email);
         print(user.displayName);
+        print(user.photoUrl);
       }
     } catch (e) {
       print(e);
