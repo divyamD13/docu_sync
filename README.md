@@ -1,16 +1,3 @@
-# docu_sync
+# DocuSync 📝✨
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+DocuSync is a sleek and modern document editor built with Flutter, designed to provide a seamless and distraction-free writing experience across both Android and iOS devices. Inspired by tools like Google Docs and Notion, it offers rich text editing capabilities, automatic cloud synchronization through Firebase, and planned support for real-time collaboration. The entire application is wrapped in a carefully crafted, minimalist user interface that features beautiful light and dark modes, aiming to be a powerful and intuitive tool for writers and teams. This project is proudly being developed in Bhagalpur, Bihar.
