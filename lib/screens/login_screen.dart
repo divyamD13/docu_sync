@@ -30,6 +30,7 @@ class _LoginScreenConsumerState extends ConsumerState<LoginScreen> {
       print('Logging in with: $email, $password');
     }
   }
+  
 
   void _signInWithGoogle() {
     ref.watch(authRepositoryProvider).signInWithGoogle();
