@@ -1,5 +1,7 @@
 import 'package:docu_sync/constants/colors.dart';
+import 'package:docu_sync/models/error_model.dart';
 import 'package:docu_sync/repository/auth_repository.dart';
+import 'package:docu_sync/screens/home_screen.dart';
 import 'package:docu_sync/screens/signup_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -32,8 +34,21 @@ class _LoginScreenConsumerState extends ConsumerState<LoginScreen> {
   }
   
 
-  void _signInWithGoogle() {
-    ref.watch(authRepositoryProvider).signInWithGoogle();
+  void _signInWithGoogle() async{
+    final errorModel = await ref.watch(authRepositoryProvider).signInWithGoogle();
+    if(errorModel!=null){
+      ref.read(userProvider.notifier).update((state) => errorModel.data);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorModel.error ?? 'Sign-in failed')),
+      );
+    }
     print('Google Sign-In triggered');
   }
 
