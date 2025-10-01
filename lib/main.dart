@@ -2,6 +2,7 @@ import 'package:docu_sync/constants/theme.dart';
 import 'package:docu_sync/models/error_model.dart';
 import 'package:docu_sync/models/user_model.dart';
 import 'package:docu_sync/repository/auth_repository.dart';
+import 'package:docu_sync/screens/home_screen.dart';
 import 'package:docu_sync/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,20 +29,21 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   void getUserData() async{
     ErrorModel error = await ref.read(authRepositoryProvider).getUserData();
-    if (errorModel != null && errorModel!.data != null) {
-      ref.read(userProvider.notifier).update((state) => errorModel!.data);
+    if (error != null && error.data != null) {
+      ref.read(userProvider.notifier).update((state) => error.data);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'DocuSync',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light, 
-      home: SplashScreen(),
+      themeMode: ThemeMode.light,
+      home: user == null ? const SplashScreen() : const HomeScreen(),
     );
   }
 }

@@ -22,21 +22,20 @@ class AuthRepository {
   final GoogleSignIn _googleSignIn;
   final Client _client;
   final LocalStorageRepository _localStorageRepository;
-
   AuthRepository({
     required GoogleSignIn googleSignIn,
     required Client client,
     required LocalStorageRepository localStorageRepository,
-  }) : _googleSignIn = googleSignIn,
-       _client = client,
-       _localStorageRepository = localStorageRepository;
+  })  : _googleSignIn = googleSignIn,
+        _client = client,
+        _localStorageRepository = localStorageRepository;
 
   Future<ErrorModel> signInWithGoogle() async {
     ErrorModel error = ErrorModel(
       error: 'Some unexpected error occurred.',
       data: null,
     );
-     try {
+    try {
       final user = await _googleSignIn.signIn();
       if (user != null) {
         final userAcc = UserModel(
@@ -70,19 +69,22 @@ class AuthRepository {
     }
     return error;
   }
-   Future<ErrorModel> getUserData() async {
+
+  Future<ErrorModel> getUserData() async {
     ErrorModel error = ErrorModel(
       error: 'Some unexpected error occurred.',
       data: null,
     );
     try {
       String? token = await _localStorageRepository.getToken();
-
+      print('Token from local storage: $token'); // Debug print
       if (token != null) {
         var res = await _client.get(Uri.parse('$host/'), headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,
         });
+        print('Response status: ${res.statusCode}'); // Debug print
+      print('Response body: ${res.body}'); 
         switch (res.statusCode) {
           case 200:
             final newUser = UserModel.fromJson(

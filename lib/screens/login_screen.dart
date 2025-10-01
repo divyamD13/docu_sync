@@ -21,7 +21,7 @@ class _LoginScreenConsumerState extends ConsumerState<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   late final double webWidth = MediaQuery.of(context).size.width * 0.3;
-  late final double mobileWidth = MediaQuery.of(context).size.width * 0.6;
+  late final double mobileWidth = MediaQuery.of(context).size.width * 0.9;
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
@@ -70,7 +70,7 @@ class _LoginScreenConsumerState extends ConsumerState<LoginScreen> {
         backgroundColor: Colors.transparent,
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 80, 20, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
