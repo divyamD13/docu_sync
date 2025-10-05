@@ -79,6 +79,7 @@ class AppTheme {
       ),
       labelStyle: const TextStyle(color: AppColors.text),
     ),
+    
 
     // Define card theme
     cardTheme: CardTheme(
