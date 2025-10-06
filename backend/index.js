@@ -14,10 +14,10 @@ const DB =
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Proper Socket.IO setup
+// Configure Socket.IO
 const io = socketIO(server, {
   cors: {
-    origin: "*",
+    origin: "*", // You can replace '*' with your Flutter web URL in production
     methods: ["GET", "POST"],
   },
 });
@@ -34,36 +34,41 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// ✅ Socket.IO events
+// Socket.IO connection
 io.on("connection", (socket) => {
-  console.log("🟢 User connected:", socket.id);
+  console.log("User connected:", socket.id);
 
+  // Join a document room
   socket.on("join", (documentId) => {
     socket.join(documentId);
     console.log(`User joined room: ${documentId}`);
   });
 
+  // Typing / collaborative changes
   socket.on("typing", (data) => {
     socket.broadcast.to(data.room).emit("changes", data);
   });
 
+  // Auto-save
   socket.on("save", async (data) => {
     try {
-      let document = await Document.findById(data.room);
-      if (!document) return;
+      const document = await Document.findById(data.room);
+      if (!document) return console.error("Document not found");
       document.content = data.delta;
       await document.save();
+      console.log("Document saved:", data.room);
     } catch (err) {
       console.error("Error saving document:", err);
     }
   });
 
+  // Disconnect
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });
 });
 
-// Use server.listen (not app.listen)
-server.listen(PORT, "0.0.0.0", () => {
+// Start server
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

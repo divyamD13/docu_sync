@@ -1,26 +1,33 @@
-import 'dart:io';
 import 'package:docu_sync/clients/socket_client.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketRepository {
-  final _socketClient = SocketClient.instance.socket!;
+  final Socket _socket = SocketClient.instance.socket!;
 
-  Socket get socketClient => _socketClient;
+  Socket get socketClient => _socket;
 
+  // Join a document room
   void joinRoom(String documentId) {
-    _socketClient.emit('join', documentId);
+    _socket.emit('join', documentId);
+    print('Joined room: $documentId');
   }
 
+  // Emit typing/delta changes
   void typing(Map<String, dynamic> data) {
-    _socketClient.emit('typing', data);
+    _socket.emit('typing', data);
   }
 
+  // Emit auto-save
   void autoSave(Map<String, dynamic> data) {
-    _socketClient.emit('save', data);
+    _socket.emit('save', data);
   }
 
+  // Listen for incoming changes
   void changeListener(Function(Map<String, dynamic>) func) {
-    _socketClient.on('changes', (data) => func(data));
+    _socket.on('changes', (data) {
+      if (data != null) {
+        func(Map<String, dynamic>.from(data));
+      }
+    });
   }
 }
