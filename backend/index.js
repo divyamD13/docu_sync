@@ -1,11 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const authRouter = require("./routes/auth");
-const documentRouter = require("./routes/document");
 const cors = require("cors");
 const http = require("http");
-const { Server } = require("socket.io");
-const Document = require("./models/document"); // <-- make sure this path is correct
+const socketIO = require("socket.io");
+const authRouter = require("./routes/auth");
+const documentRouter = require("./routes/document");
+const Document = require("./models/document");
 
 const PORT = process.env.PORT || 3001;
 const DB =
@@ -14,10 +14,10 @@ const DB =
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Proper Socket.IO setup with CORS for web clients
-const io = new Server(server, {
+// ✅ Proper Socket.IO setup
+const io = socketIO(server, {
   cors: {
-    origin: "*", // you can restrict this to your deployed frontend domain later
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -28,19 +28,15 @@ app.use(express.json());
 app.use(authRouter);
 app.use(documentRouter);
 
-// Connect to MongoDB
+// MongoDB connection
 mongoose
   .connect(DB)
-  .then(() => {
-    console.log("✅ Database connected successfully");
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
-  });
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-// ✅ Socket.IO logic
+// ✅ Socket.IO events
 io.on("connection", (socket) => {
-  console.log("🟢 A user connected:", socket.id);
+  console.log("🟢 User connected:", socket.id);
 
   socket.on("join", (documentId) => {
     socket.join(documentId);
@@ -52,27 +48,22 @@ io.on("connection", (socket) => {
   });
 
   socket.on("save", async (data) => {
-    await saveData(data);
+    try {
+      let document = await Document.findById(data.room);
+      if (!document) return;
+      document.content = data.delta;
+      await document.save();
+    } catch (err) {
+      console.error("Error saving document:", err);
+    }
   });
 
   socket.on("disconnect", () => {
-    console.log("🔴 A user disconnected:", socket.id);
+    console.log("User disconnected:", socket.id);
   });
 });
 
-// ✅ Save function
-const saveData = async (data) => {
-  try {
-    let document = await Document.findById(data.room);
-    if (!document) return;
-    document.content = data.delta;
-    await document.save();
-  } catch (err) {
-    console.error("Error saving document:", err);
-  }
-};
-
-// ✅ IMPORTANT: Use server.listen (not app.listen)
+// Use server.listen (not app.listen)
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
