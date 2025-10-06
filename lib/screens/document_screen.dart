@@ -237,7 +237,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     });
   }
 
- void fetchDocumentData() async {
+  // Add this in your State class
+
+void fetchDocumentData() async {
   errorModel = await ref.read(documentRepositoryProvider).getDocumentById(
         ref.read(userProvider)!.token,
         widget.id,
@@ -246,30 +248,37 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   if (errorModel!.data != null) {
     final docModel = errorModel!.data as DocumentModel;
 
-    // Set title
+    // Set document title
     titleController.text = docModel.title;
 
-    // Ensure content delta ends with newline
-    List<dynamic> contentDelta = docModel.content;
+    // Sanitize the delta: keep only insert operations
+    List<dynamic> rawDelta = docModel.content;
+    List<Map<String, dynamic>> sanitizedDelta = [];
 
-    if (contentDelta.isNotEmpty) {
-      final lastOp = contentDelta.last;
-      if (lastOp['insert'] is String &&
-          !(lastOp['insert'] as String).endsWith('\n')) {
-        lastOp['insert'] += '\n';
+    for (var op in rawDelta) {
+      if (op.containsKey('insert')) {
+        // Ensure insert ends with newline
+        if (op['insert'] is String && !(op['insert'] as String).endsWith('\n')) {
+          op['insert'] += '\n';
+        }
+        sanitizedDelta.add(Map<String, dynamic>.from(op));
       }
-    } else {
-      // Empty document -> start with one newline
-      contentDelta.add({'insert': '\n'});
+    }
+
+    // If document is empty, start with a newline
+    if (sanitizedDelta.isEmpty) {
+      sanitizedDelta.add({'insert': '\n'});
     }
 
     // Initialize QuillController
     _controller = quill.QuillController(
-      document: quill.Document.fromDelta(Delta.fromJson(contentDelta)),
+      document: quill.Document.fromDelta(Delta.fromJson(sanitizedDelta)),
       selection: const TextSelection.collapsed(offset: 0),
     );
 
-    // Listen for local changes for collaborative editing
+    setState(() {});
+
+    // Listen for local changes (for collaborative editing + auto-save)
     _controller!.document.changes.listen((docChange) {
       if (docChange.source == quill.ChangeSource.local) {
         final deltaMap = {
@@ -277,23 +286,22 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           'room': widget.id,
         };
 
-        // Emit typing event
+        // Emit typing event for other collaborators
         socketRepo.typing(deltaMap);
 
-        // Debounced auto-save every 2 seconds after typing stops
+        // Debounced auto-save after 2 seconds of no typing
         _autoSaveDebounce?.cancel();
         _autoSaveDebounce = Timer(const Duration(seconds: 2), () {
           socketRepo.autoSave(deltaMap);
         });
       }
     });
-
-    setState(() {});
   } else {
     // Handle error
     print('Error loading document: ${errorModel!.error}');
   }
 }
+
 
 
   @override
