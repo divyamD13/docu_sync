@@ -19,6 +19,7 @@ const io = socketIO(server, {
   cors: {
     origin: "*", // You can replace '*' with your Flutter web URL in production
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 

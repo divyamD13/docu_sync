@@ -9,7 +9,7 @@ class SocketClient {
     socket = io.io(
       host, // your Render backend URL from constants.dart
       <String, dynamic>{
-        'transports': ['websocket'],
+        'transports': ['websocket', 'polling'],
         'autoConnect': false,
       },
     );
