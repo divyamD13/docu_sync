@@ -43,18 +43,14 @@ class _MyAppState extends ConsumerState<MyApp> {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'DocuSync',
-       // ✅ Add these localization delegates
       localizationsDelegates:  [
         FlutterQuillLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
-      // ✅ Specify supported locales
       supportedLocales: const [
-        Locale('en'), // English
-        // Add more locales if needed (e.g., Locale('hi') for Hindi)
+        Locale('en'),
       ],
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
