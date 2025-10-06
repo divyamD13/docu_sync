@@ -237,43 +237,64 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     });
   }
 
-  void fetchDocumentData() async {
-    errorModel = await ref.read(documentRepositoryProvider).getDocumentById(
-          ref.read(userProvider)!.token,
-          widget.id,
-        );
-
-    if (errorModel!.data != null) {
-      final docModel = errorModel!.data as DocumentModel;
-      titleController.text = docModel.title;
-      _controller = quill.QuillController(
-        document: docModel.content.isEmpty
-            ? quill.Document()
-            : quill.Document.fromDelta(Delta.fromJson(docModel.content)),
-        selection: const TextSelection.collapsed(offset: 0),
+ void fetchDocumentData() async {
+  errorModel = await ref.read(documentRepositoryProvider).getDocumentById(
+        ref.read(userProvider)!.token,
+        widget.id,
       );
 
-      // Listen for local changes
-      _controller!.document.changes.listen((docChange) {
-        if (docChange.source == quill.ChangeSource.local) {
-          final deltaMap = {
-            'delta': docChange.change.toJson(),
-            'room': widget.id,
-          };
-          // Emit typing updates
-          socketRepo.typing(deltaMap);
+  if (errorModel!.data != null) {
+    final docModel = errorModel!.data as DocumentModel;
 
-          // Debounced auto-save
-          _autoSaveDebounce?.cancel();
-          _autoSaveDebounce = Timer(const Duration(seconds: 2), () {
-            socketRepo.autoSave(deltaMap);
-          });
-        }
-      });
+    // Set title
+    titleController.text = docModel.title;
 
-      setState(() {});
+    // Ensure content delta ends with newline
+    List<dynamic> contentDelta = docModel.content;
+
+    if (contentDelta.isNotEmpty) {
+      final lastOp = contentDelta.last;
+      if (lastOp['insert'] is String &&
+          !(lastOp['insert'] as String).endsWith('\n')) {
+        lastOp['insert'] += '\n';
+      }
+    } else {
+      // Empty document -> start with one newline
+      contentDelta.add({'insert': '\n'});
     }
+
+    // Initialize QuillController
+    _controller = quill.QuillController(
+      document: quill.Document.fromDelta(Delta.fromJson(contentDelta)),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
+
+    // Listen for local changes for collaborative editing
+    _controller!.document.changes.listen((docChange) {
+      if (docChange.source == quill.ChangeSource.local) {
+        final deltaMap = {
+          'delta': docChange.change.toJson(),
+          'room': widget.id,
+        };
+
+        // Emit typing event
+        socketRepo.typing(deltaMap);
+
+        // Debounced auto-save every 2 seconds after typing stops
+        _autoSaveDebounce?.cancel();
+        _autoSaveDebounce = Timer(const Duration(seconds: 2), () {
+          socketRepo.autoSave(deltaMap);
+        });
+      }
+    });
+
+    setState(() {});
+  } else {
+    // Handle error
+    print('Error loading document: ${errorModel!.error}');
   }
+}
+
 
   @override
   void dispose() {
